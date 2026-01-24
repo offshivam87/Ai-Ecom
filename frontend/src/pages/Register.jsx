@@ -1,22 +1,46 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncRegisterAction } from "../redux/actions/userAction";
+import axios from "axios";
+import { useState } from "react";
 
 const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm(); 
+  const [loading, setLoading] = useState(false);
 
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user);
+  
+  const Navigate = useNavigate(); 
 
   const onSubmit = async (data) => {
-    dispatch(asyncRegisterAction(data));
-    console.log(userData);
+    console.log("submit data",data);
+    
+
+    try {
+      setLoading(true);
+    const res = await axios.post("http://localhost:3000/api/auth/register", data, { withCredentials: true });
+    
+    
+    
+
+    // 🔥 Email save for OTP page
+    localStorage.setItem("verifyEmail", data.email);
+
+    // 🔥 Navigate to OTP page
+    Navigate("/verify-otp");
+    setLoading(false);
+
+  } catch (error) {
+    console.log(error);
+  }
+    // await dispatch(asyncRegisterAction(data));
+    // console.log(userData);
+    // Navigate("/verify-otp");
     
     // yahan backend register API call hogi
   };
@@ -57,7 +81,7 @@ const Register = () => {
                   message: "Minimum 3 characters required",
                 },
               })}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
             />
             {errors.username && (
               <p className="text-red-500 text-sm mt-1">
@@ -81,7 +105,7 @@ const Register = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -105,7 +129,7 @@ const Register = () => {
                   message: "Minimum 6 characters required",
                 },
               })}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -119,9 +143,10 @@ const Register = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+            disabled={loading}
+            className="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700 transition"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </motion.button>
         </form>
 
@@ -130,7 +155,7 @@ const Register = () => {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-indigo-600 font-medium hover:underline"
+            className="text-orange-600 font-medium hover:underline"
           >
             Login
           </Link>

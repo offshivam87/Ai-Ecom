@@ -1,24 +1,30 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
+import { Truck } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isverified, user } = useSelector((state) => state.user);
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "My Orders", path: "/my-orders" },
     { name: "Categories", path: "/categories" },
     { name: "Contact", path: "/contact" },
+    { name: "Cart", path: "/cart" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
+    <nav className="fixed z-[9999]  top-0 left-0 w-full  bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-indigo-600">
-          ShopEase
+        <Link to="/" className="text-2xl  flex gap-2 pt-0.5 items-center font-bold text-orange-600">
+          DLeap Kart
+          
+          <Truck size={25} className="text-orange-500 pt-" />
         </Link>
 
         {/* Desktop Menu */}
@@ -27,7 +33,7 @@ const Navbar = () => {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? "text-indigo-600 font-semibold"
+                  ? "text-orange-600 font-semibold"
                   : "text-gray-600"
               }
               key={link.name}
@@ -39,12 +45,23 @@ const Navbar = () => {
           ))}
 
           {/* Login Button */}
-          <Link
-            to="/login"
-            className="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition"
-          >
-            Login
-          </Link>
+          {!isverified && (
+            <Link
+              to="/login"
+              className="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-orange-600 transition"
+            >
+              Login
+            </Link>)}
+
+          {/* LOGGED IN + ADMIN */}
+          {isverified && user?.role === "admin" && (
+            <Link
+              to="/admin"
+              className="bg-orange-400 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+              Admin pannel
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -73,20 +90,31 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
-                    isActive? "text-indigo-600 font-semibold": "text-gray-600"
+                    isActive ? "text-orange-600 font-semibold" : "text-gray-600"
                   }
                 >
                   {link.name}
                 </NavLink>
               ))}
 
+              {!isverified && (
+
               <Link
                 to="/login"
                 onClick={() => setIsOpen(false)}
-                className="bg-indigo-600 text-white text-center py-2 rounded-lg hover:bg-indigo-700 transition"
+                className="bg-orange-600 text-white text-center py-2 rounded-lg hover:bg-orange-700 transition"
               >
                 Login
-              </Link>
+              </Link>)}
+              {isverified && user?.role === "admin" && (
+            <Link
+              to="/admin"
+              onClick={() => setIsOpen(false)}
+              className="bg-orange-500 text-white text-center px-5 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+              Admin Pannel
+            </Link>
+          )}
             </div>
           </motion.div>
         )}

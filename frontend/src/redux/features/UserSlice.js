@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user:{}
+  user:null,
+  isverified:false,
+
 
 };
 
@@ -11,8 +13,7 @@ export const userSlice = createSlice({
   reducers: {
     loadUser: (state, action) => {
       state.user = action.payload;
-      console.log(action);
-      
+      state.isverified = action.payload.isverified;
     }
   },
 });

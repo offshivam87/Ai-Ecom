@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    isverified: { type: Boolean, default: false },
+    otp: { type: String },
+    otpExpiry: { type: Number },
     role: { 
         type: String, 
         enum: ['user', 'admin'], // सिर्फ ये दो ही वैल्यू हो सकती हैं

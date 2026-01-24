@@ -1,32 +1,32 @@
-const express = require('express');
-const userModel = require('../models/user.model');
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/user.model");
 
-async function registerUser(req, res) {
-    const { username, email, password } = req.body;
+const authMiddleware = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
 
-    const user = await userModel.create({ username, email, password })
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    res.cookie('token', token);
-    res.status(201).json({ message: 'User registered successfully' ,user})
-}
-
-async function loginUser(req, res) {
-    const { email, password } = req.body;
-    
-    const isUserExist = await userModel.findOne({ email});
-    if(!isUserExist){
-        return res.status(404).json({ message: 'User not found' });
+    if (!token) {
+      return res.status(401).json({ message: "Not authorized" });
     }
-    if(isUserExist.password !== password){
-        return res.status(401).json({ message: 'Invalid credentials' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel
+      .findById(decoded.userId)
+      .select("-password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
     }
-    const token = jwt.sign({ userId: isUserExist._id }, process.env.JWT_SECRET);
-    res.cookie('token', token)
-    res.status(200).json({ message: 'Login successful' ,user:isUserExist});
 
-}
+    // 🔥 middleware ka kaam yahin hota hai
+    req.user = user;        // full user
+    req.userId = user._id;  // convenience
 
+    next(); // 🚀 request controller ko de do
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
 
-module.exports = { registerUser, loginUser };
+module.exports = authMiddleware;

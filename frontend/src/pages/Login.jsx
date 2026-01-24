@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { asyncLoginAction } from "../redux/actions/userAction.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -12,6 +12,9 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
 
@@ -21,13 +24,16 @@ const Login = () => {
 
 
   const onSubmit = async (data) => {
-    const response = await dispatch(asyncLoginAction(data));
-    console.log(userData);
-    
-    
-    
-    
-    
+    try {
+      
+      
+      await dispatch(asyncLoginAction(data));
+      navigate("/");
+    } catch (err) {
+      alert(err.message); // "Please verify your email first"
+      navigate("/verify-otp");
+    }
+
   };
 
   return (
@@ -50,7 +56,7 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-5">
 
           {/* Username */}
-         
+
 
           {/* Email */}
           <div>
@@ -67,7 +73,7 @@ const Login = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -91,7 +97,7 @@ const Login = () => {
                   message: "Minimum 6 characters required",
                 },
               })}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -105,7 +111,7 @@ const Login = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+            className="w-full bg-orange-600 text-white py-2 rounded-lg font-semibold hover:bg-orange-700 transition"
           >
             Login
           </motion.button>
@@ -116,7 +122,7 @@ const Login = () => {
           Don’t have an account?{" "}
           <Link
             to="/register"
-            className="text-indigo-600 font-medium hover:underline"
+            className="text-orange-600 font-medium hover:underline"
           >
             Register
           </Link>
