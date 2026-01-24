@@ -5,11 +5,11 @@ const sendEmail = require('../email/email');
 
 async function registerUser(req, res) {
   try {
-
-    function generateOtp() {
-      return Math.floor(100000 + Math.random() * 900000).toString();
-    }
     const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
 
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -18,28 +18,42 @@ async function registerUser(req, res) {
       });
     }
 
-    const otp = generateOtp();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = Date.now() + 15 * 60 * 1000;
 
-    const user = await userModel.create({ username, email, password, otp, otpExpiry, isverified: false });
-    await sendEmail(
+    
+
+    await userModel.create({
+      username,
       email,
-      "Verify your email",
-      `Your OTP is ${otp}. It will expire in 15 minutes.`
-    );
+      password,
+      otp,
+      otpExpiry,
+      isverified: false,
+    });
+
+    // 🔥 email isolated
+    try {
+      await sendEmail(
+        email,
+        "Verify your email",
+        `Your OTP is ${otp}. It will expire in 15 minutes.`
+      );
+    } catch (e) {
+      console.error("Email failed:", e);
+    }
 
     return res.status(201).json({
       message: "OTP sent to your email. Please verify to continue.",
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Registration failed",
     });
-
-
   }
 }
+
 
 //   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 //   res.cookie('token', token);
