@@ -29,7 +29,7 @@ const ProductDetails = () => {
         setError(null);
 
         const res = await axios.get(
-          `http://localhost:3000/api/product/getAllProducts?_id=${id}`
+          `https://dleapkart.onrender.com/api/product/getAllProducts?_id=${id}`
         );
 
 

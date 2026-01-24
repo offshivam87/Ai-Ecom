@@ -31,7 +31,7 @@ const VerifyOtp = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post("http://localhost:3000/api/auth/verify-otp", {
+      const res = await axios.post("https://dleapkart.onrender.com/api/auth/verify-otp", {
         email,
         otp: data.otp,
       }, { withCredentials: true });

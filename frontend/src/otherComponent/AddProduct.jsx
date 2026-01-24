@@ -28,7 +28,7 @@ const AddProduct = () => {
 
       // 🔥 STEP 3: API call
       await axios.post(
-        "http://localhost:3000/api/product/createProduct",
+        "https://dleapkart.onrender.com/api/product/createProduct",
         formData,
         {
           withCredentials: true,

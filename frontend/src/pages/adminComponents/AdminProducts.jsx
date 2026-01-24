@@ -12,7 +12,7 @@ const AdminProducts = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchAllProducts = async () => {
-      const AllProducts = await axios.get('http://localhost:3000/api/product/getAllProducts',
+      const AllProducts = await axios.get('https://dleapkart.onrender.com/api/product/getAllProducts',
         { withCredentials: true }
       )
       console.log(AllProducts);
@@ -24,7 +24,7 @@ const AdminProducts = () => {
   const handleDelete = async (id) => {
     
     await axios.delete(
-      `http://localhost:3000/api/product/deleteProduct/${id}`,
+      `https://dleapkart.onrender.com/api/product/deleteProduct/${id}`,
       { withCredentials: true }
     );
     setProducts(products.filter(product => product._id !== id));

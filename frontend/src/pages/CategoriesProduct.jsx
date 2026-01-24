@@ -24,7 +24,7 @@ const CategoryProducts = () => {
         setError(null);
 
         const res = await axios.get(
-          `http://localhost:3000/api/product/getAllProducts?category=${formatCategory(
+          `https://dleapkart.onrender.com/api/product/getAllProducts?category=${formatCategory(
             category
           )}`
         );

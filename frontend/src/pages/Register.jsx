@@ -23,7 +23,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-    const res = await axios.post("http://localhost:3000/api/auth/register", data, { withCredentials: true });
+    const res = await axios.post("https://dleapkart.onrender.com/api/auth/register", data, { withCredentials: true });
     
     
     

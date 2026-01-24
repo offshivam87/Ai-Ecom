@@ -4,7 +4,7 @@ import { loadUser } from '../features/UserSlice';
 export const asyncLoginAction = (userData) => async (dispatch) => {
     try {
         const response = await axios.post(
-            'http://localhost:3000/api/auth/login',
+            'https://dleapkart.onrender.com/api/auth/login',
             userData,
             { withCredentials: true }
         );
@@ -18,6 +18,6 @@ export const asyncLoginAction = (userData) => async (dispatch) => {
 };
 
 export const asyncRegisterAction = (userData) => async (dispatch, getState) => {
-    const response = await axios.post('http://localhost:3000/api/auth/register', userData);
+    const response = await axios.post('https://dleapkart.onrender.com/api/auth/register', userData);
     dispatch(loadUser(response.data));
 }

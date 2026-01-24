@@ -20,7 +20,7 @@ const App = () => {
     const rehydrateUser = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/auth/getUserDetails",
+          "https://dleapkart.onrender.com/api/auth/getUserDetails",
           { withCredentials: true } // 🔥 MUST
         );
 

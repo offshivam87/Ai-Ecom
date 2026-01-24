@@ -18,7 +18,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/my-orders",
+          "https://dleapkart.onrender.com/api/my-orders",
           { withCredentials: true }
         );
         console.log(res.data);

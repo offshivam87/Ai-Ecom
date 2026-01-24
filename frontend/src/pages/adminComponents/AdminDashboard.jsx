@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
     const res = await axios.get(
-      "http://localhost:3000/api/product/order-stats",
+      "https://dleapkart.onrender.com/api/product/order-stats",
       { withCredentials: true }
     );
     console.log(res.data.stats);

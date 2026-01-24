@@ -14,7 +14,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await axios.get(
-        `http://localhost:3000/api/product/getAllProducts?_id=${id}`,
+        `https://dleapkart.onrender.com/api/product/getAllProducts?_id=${id}`,
         { withCredentials: true }
       );
       setProduct(res.data.products[0]);
@@ -42,7 +42,7 @@ const EditProduct = () => {
       });
 
       await axios.put(
-        `http://localhost:3000/api/product/updateProduct/${id}`,
+        `https://dleapkart.onrender.com/api/product/updateProduct/${id}`,
         formData,
         { withCredentials: true }
       );

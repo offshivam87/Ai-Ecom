@@ -10,7 +10,7 @@ const AdminOrders = () => {
 
   const updateStatus = async (id, status) => {
     Setloading(true)
-    const res = await axios.post(`http://localhost:3000/api/updateorder/${id}`, {
+    const res = await axios.post(`https://dleapkart.onrender.com/api/updateorder/${id}`, {
       status
     }, {
       withCredentials: true
@@ -22,7 +22,7 @@ const AdminOrders = () => {
   useEffect(() => {
     try {
       const fetchAllOrders = async () => {
-        const AllOrders = await axios.get('http://localhost:3000/api/product/adminOrders',
+        const AllOrders = await axios.get('https://dleapkart.onrender.com/api/product/adminOrders',
           { withCredentials: true }
         )
         console.log(AllOrders.data.AllPendingOrders);

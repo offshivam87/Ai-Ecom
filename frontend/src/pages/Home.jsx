@@ -19,9 +19,9 @@ const Home = () => {
         setLoading(true);
 
         const [featuredRes, newArrivalRes,HomeRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/product/getAllProducts?category=Electronics&isFeatured=true"),
-          axios.get("http://localhost:3000/api/product/getAllProducts?category=Fashion&isNewArrival=true"),
-          axios.get("http://localhost:3000/api/product/getAllProducts?category=Home"),
+          axios.get("https://dleapkart.onrender.com/api/product/getAllProducts?category=Electronics&isFeatured=true"),
+          axios.get("https://dleapkart.onrender.com/api/product/getAllProducts?category=Fashion&isNewArrival=true"),
+          axios.get("https://dleapkart.onrender.com/api/product/getAllProducts?category=Home"),
         ]);
 
         setFeatured(featuredRes.data.products);

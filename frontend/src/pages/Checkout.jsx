@@ -30,7 +30,7 @@ const Checkout = () => {
     }
     navigate("/order-success");
 
-    await axios.post("http://localhost:3000/api/createOrder", {
+    await axios.post("https://dleapkart.onrender.com/api/createOrder", {
       userId: user._id,
       items: cart.items,
       totalAmount: cart.totalPrice,
