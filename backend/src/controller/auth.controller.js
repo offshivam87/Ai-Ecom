@@ -69,14 +69,11 @@ async function registerUser(req, res) {
 
 
 
-      await sendEmail(
-        email,
-        "Verify Your Email Address",
-        `Your OTP is ${otp}. It will expire in 15 minutes.`,
-        htmlTemplate
-
-
-      );
+      await sendEmail({
+      to: email,
+      subject: "Verify Your Email Address",
+      html: htmlTemplate,
+    });
       console.log("After sendMail");
     } catch (e) {
       console.error("Email failed:", e);
