@@ -8,7 +8,7 @@ async function registerUser(req, res) {
     const { username, email, password } = req.body;
     console.log("REGISTER API HIT", req.body);
 
-    
+
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields required" });
@@ -24,7 +24,7 @@ async function registerUser(req, res) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = Date.now() + 15 * 60 * 1000;
 
-    
+
 
     await userModel.create({
       username,
@@ -37,7 +37,33 @@ async function registerUser(req, res) {
 
     // 🔥 email isolated
     try {
-      console.log("Before sendMail");
+      const htmlTemplate = `
+<div style="font-family: Arial, sans-serif; line-height: 1.6;">
+  <h2>Email Verification</h2>
+  <p>Hello,</p>
+
+  <p>Thank you for registering with <strong>DLeap Kart</strong>.</p>
+
+  <p>Your One-Time Password (OTP) is:</p>
+
+  <h1 style="letter-spacing: 2px;">${otp}</h1>
+
+  <p>
+    This OTP is valid for <strong>15 minutes</strong>.  
+    Please do not share this code with anyone.
+  </p>
+
+  <p>
+    If you did not request this verification, you can safely ignore this email.
+  </p>
+
+  <p>
+    Regards,<br/>
+    <strong>DLeap Kart Team</strong>
+  </p>
+</div>
+`;
+
 
 
 
@@ -45,8 +71,11 @@ async function registerUser(req, res) {
 
       await sendEmail(
         email,
-        "Verify your email",
-        `Your OTP is ${otp}. It will expire in 15 minutes.`
+        "Verify Your Email Address",
+        `Your OTP is ${otp}. It will expire in 15 minutes.`,
+        htmlTemplate
+
+
       );
       console.log("After sendMail");
     } catch (e) {
@@ -73,20 +102,20 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
   const { email, password } = req.body;
 
-  console.log("email",email);
-  console.log("pass",password);
+  console.log("email", email);
+  console.log("pass", password);
 
   const isUserExist = await userModel.findOne({ email });
   if (!isUserExist) {
     return res.status(404).json({ message: 'User not found' });
   }
   console.log(isUserExist.isverified);
-  
+
   if (!isUserExist.isverified) {
-  return res.status(403).json({
-    message: "Please verify your email first",
-  });
-}
+    return res.status(403).json({
+      message: "Please verify your email first",
+    });
+  }
 
   if (isUserExist.password !== password) {
     return res.status(401).json({ message: 'Invalid credentials' });
@@ -100,7 +129,7 @@ async function loginUser(req, res) {
 async function getUserDetails(req, res) {
   try {
     const token = req.cookies.token;
-    
+
 
 
     if (!token) {
