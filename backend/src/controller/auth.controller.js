@@ -6,6 +6,9 @@ const sendEmail = require('../email/email');
 async function registerUser(req, res) {
   try {
     const { username, email, password } = req.body;
+    console.log("REGISTER API HIT", req.body);
+
+    
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields required" });
@@ -34,11 +37,18 @@ async function registerUser(req, res) {
 
     // 🔥 email isolated
     try {
+      console.log("Before sendMail");
+
+
+
+
+
       await sendEmail(
         email,
         "Verify your email",
         `Your OTP is ${otp}. It will expire in 15 minutes.`
       );
+      console.log("After sendMail");
     } catch (e) {
       console.error("Email failed:", e);
     }
